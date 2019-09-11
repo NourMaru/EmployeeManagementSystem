@@ -24,7 +24,7 @@ public class Tester {
 
         HourlyEmployee Jane = new HourlyEmployee(100000, "Jane", "Doe", "Underwriter",
                 startDate, "524565187", 9052241451L, "jdoe@mail.com",
-                "123 Main st, Toronto, ON, Canada",15,true, "Reception");
+                "123 Main st, Toronto, ON, Canada", 15,true, "Reception");
         dm.set(2000, Calendar.DECEMBER, 14);
 
 
