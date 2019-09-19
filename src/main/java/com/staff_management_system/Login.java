@@ -56,7 +56,7 @@ public class Login extends HttpServlet {
                 session.setAttribute("errors", errorBuffer.toString());
                 response.sendRedirect("./login.jsp");
 
-                //for the first deliverable you will have to check if there was a problem
+                //for the first deliverable you will have to check if there was any problem
                 //with just the password, or login id and password
                 //this will require a special method e.g. public static boolean isExistingLogin(String arg);
             }
