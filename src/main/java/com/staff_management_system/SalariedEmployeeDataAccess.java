@@ -195,4 +195,62 @@ public class SalariedEmployeeDataAccess {
         }
         return false;
     }
+    
+     public SalariedEmployee login(int id, String password) throws NotFoundException, InvalidEmployeeDataException { // retrieve hourly employee data
+        aSalariedEmployee = null;
+        // define the SQL query statement
+        String sqlQuery = "SELECT id, password, firstname, lastname, role, startdate, sin, phonenumber, emailaddress, address, hourly, enabled, branch, education FROM tblhourlyemployee WHERE id = '" + id + "' AND password = '" + password + "'";
+        System.out.println(sqlQuery);
+        // execute the SQL query statement
+        try {
+            ResultSet rs = aStatement.executeQuery(sqlQuery);
+            // next method sets cursor & returns true if there is data
+            boolean gotIt = rs.next();
+            if (gotIt) { // extract the data
+                id = rs.getInt("id");
+                password = rs.getString("password");
+                firstName = rs.getString("firstname");
+                lastName = rs.getString("lastname");
+                role = rs.getString("role");
+                startDate = rs.getDate("startdate");
+                sin = rs.getString("sin");
+                phoneNumber = rs.getLong("phonenumber");
+                emailAddress = rs.getString("emailaddress");
+                address = rs.getString("address");
+                hourly = rs.getFloat("hourly");
+                enabled = rs.getBoolean("enabled");
+                branch = rs.getString("branch");
+                education = rs.getString("education");
+
+
+                aSalariedEmployee = new SalariedEmployee(id, password, firstName, lastName, role, startDate, sin, phoneNumber, emailAddress, address, hourly, enabled, branch, education);
+
+            } else // nothing was retrieved
+            {
+                throw (new NotFoundException("Attempt to retrieve an SalariedEmployee that does not exist (Id: " + id + ") \n" + "Employee with if of " + id + " not found in the database."));
+            }
+            rs.close();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+
+        return aSalariedEmployee;
+    }
+
+
+    public boolean isExistingLogin(String id) {
+        // retrieve employee data
+        // define the SQL query statement using the id key
+        String sqlQuery = "SELECT  * FROM students WHERE id= '" + id + "'";
+        //System.out.println(sqlQuery);
+        boolean exists = true;
+        // execute the SQL query statement
+        try {
+            aStatement = aConnection.createStatement();
+            ResultSet rs = aStatement.executeQuery(sqlQuery);
+            exists = rs.next();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return exists;
 }
