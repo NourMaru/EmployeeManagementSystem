@@ -1,5 +1,6 @@
 package com.staff_management_system;
 
+import java.sql.Connection;
 import java.text.DecimalFormat;
 import java.util.Date;
 
@@ -10,7 +11,7 @@ import java.util.Date;
  * @version 2.0
  * @since 1.0
  */
-public class SalariedEmployee extends ComStaff {
+public class SalariedEmployee extends User {
 
     /**
      * instance attributes that will be used with attributes of the ComStaff class
@@ -20,7 +21,6 @@ public class SalariedEmployee extends ComStaff {
 
     //The education instance variable
     private String education;
-
 
     /**
      * return the branch attribute for the SalariedEmployee
@@ -82,10 +82,8 @@ public class SalariedEmployee extends ComStaff {
      */
     public SalariedEmployee(int id, String firstName, String lastName, String role,
                             Date startDate, String sin, long phoneNumber, String emailAddress,
-                            String address, double salary, boolean isEnabled, String branch, String education)
+                            String address, float salary, boolean isEnabled, String branch, String education)
             throws InvalidEmployeeDataException {
-
-
         try {
             this.setId(id);
             this.setFirstName(firstName);
@@ -121,6 +119,41 @@ public class SalariedEmployee extends ComStaff {
     }
 
     /**
+     * @param id the employee's Id
+     * @throws NotFoundException exception is thrown if the employee record not found
+     */
+    public SalariedEmployee retrieve(int id) throws NotFoundException {
+        return SalariedEmployeeDataAccess.retrieve(id);
+    }
+
+    /**
+     * HourlyEmployee public method header for a method called terminate()
+     * that takes no arguments and calls employee
+     */
+    public void terminate() {
+        SalariedEmployeeDataAccess.terminate();
+    }
+
+    /**
+     * @param id
+     * @return the employee's record as an instance of employee
+     * @throws NotFoundException
+     */
+    public SalariedEmployee find(int id) throws NotFoundException {
+        return SalariedEmployeeDataAccess.retrieve(id);
+    }
+
+    /**
+     * initialize()
+     * employee public method header for a method called initialize()
+     * that takes connection arguments and calls employee
+     */
+
+    public void initialize(Connection c) {
+        SalariedEmployeeDataAccess.initialize(c);
+    }
+
+    /**
      * Creating an instance method named displayToConsole()
      * that inherits from the super class and does not take any arguments, returns nothing and just
      * displays the returned string from the toString() method
@@ -131,25 +164,33 @@ public class SalariedEmployee extends ComStaff {
     }
 
     /**
-     * @return abstract method create() that returns false
+     * @param aSalariedEmployee
+     * @return boolean
+     * @throws DuplicateEmployeeException
      */
-    public boolean create() {
+    public boolean create(SalariedEmployee aSalariedEmployee) throws DuplicateEmployeeException {
+        SalariedEmployeeDataAccess.create(aSalariedEmployee);
         return false;
     }
 
     /**
-     * @return abstract method update() that returns zero
+     * @param aSalariedEmployee
+     * @return false
      */
-    public int update() {
-        return 0;
+    public boolean update(SalariedEmployee aSalariedEmployee) {
+        SalariedEmployeeDataAccess.update(aSalariedEmployee);
+        return false;
     }
 
     /**
-     * @return abstract method delete() that returns zero
+     * @param aSalariedEmployee
+     * @return false
      */
-    public int delete() {
-        return 0;
+    public boolean delete(SalariedEmployee aSalariedEmployee) {
+        SalariedEmployeeDataAccess.delete(aSalariedEmployee);
+        return false;
     }
+
 
     /*
      * SalariedEmployee public method header for a method called getTypeForDisplay()

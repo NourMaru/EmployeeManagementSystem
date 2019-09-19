@@ -3,68 +3,75 @@ package com.staff_management_system;
 import javax.mail.internet.InternetAddress;
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.Formatter;
 import java.util.Locale;
 
 
 /**
- * Class ComStaff that holds default and parameterized constructors with values.
+ * Class User that holds default and parameterized constructors with values.
  *
  * @author Nour Al Jarrah
  * @version 2.0
  * @since 1.0
  */
 
-public class ComStaff {
+public class User {
 
+    //The default minimum length for password shared variable
+    public final static int MINIMUM_PASSWORD_LENGTH = 6;
+    //The default maximum length for password shared variable
+    public final static int MAXIMUM_PASSWORD_LENGTH = 12;
+    //The default date format shared variable
+    public final DateFormat DF = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.CANADA);
+    //The default number length of employee's ID shared variable
+    public final byte ID_NUMBER_LENGTH = 6;
     //The id instance variable
     private int id;
-
+    //The password instance variable
+    private String password;
     //The employee's first name instance variable
     private String firstName;
-
     //The employee's last name instance variable
     private String lastName;
-
     //The role at company instance variable
     private String role;
-
     //The employee's start working at company date instance variable
     private Date startDate;
-
     //The employee's social insurance number instance variable
     private String sin;
-
     //The employee's personal phone number instance variable
     private long phoneNumber;
-
     //The employee's email address instance variable
     private String emailAddress;
-
     //The employee's home address instance variable
     private String address;
-
     //The employee's salary instance variable
-    private double salary;
-
+    private float salary;
     //The employee's hourly wage instance variable
-    private double hourly;
-
+    private float hourly;
     //The enabled instance variable
     private boolean enabled;
 
-    //The default date format shared variable
-    public final static DateFormat DF = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.CANADA);
-
-    //The default number length of employee's ID shared variable
-    public final static byte ID_NUMBER_LENGTH = 6;
-
+    /**
+     * @return public abstract method named isValidEmailAddress() that takes string arguments and returns a boolean.
+     */
+    public boolean isValidEmailAddress(String email) {
+        boolean result = true;
+        try {
+            InternetAddress emailAddress = new InternetAddress(email);
+            emailAddress.validate();
+        } catch (Exception ex) {
+            return false;
+        }
+        return true;
+    }
 
     /**
      * return the id attribute for the employee
      *
      * @return the id
      */
-    public long getId() {
+    public int getId() {
         return id;
     }
 
@@ -84,6 +91,29 @@ public class ComStaff {
     }
 
     /**
+     * return the password attribute for the User
+     *
+     * @return the password
+     */
+    public String getPassword() {
+        return password;
+    }
+
+    /**
+     * Set the password attribute for the User
+     *
+     * @param password the password to set
+     * @throws InvalidPasswordException this exception is thrown if the password is smaller or bigger than the character limit
+     */
+    public void setPassword(String password) throws InvalidPasswordException {
+
+        if (password.length() > MINIMUM_PASSWORD_LENGTH && password.length() < MAXIMUM_PASSWORD_LENGTH)
+            this.password = password;
+        else
+            throw new InvalidPasswordException("\nThe user password must be between " + MINIMUM_PASSWORD_LENGTH + " and " + MAXIMUM_PASSWORD_LENGTH + " characters long.");
+    }
+
+    /**
      * return the first name attribute for the employee
      *
      * @return the firstName
@@ -99,7 +129,7 @@ public class ComStaff {
      * @throws InvalidNameException this exception is thrown if the first name is invalid
      */
     public void setFirstName(String firstName) throws InvalidNameException {
-        if (firstName != new String(""))
+        if (firstName != "")
             this.firstName = firstName;
         else
             throw new InvalidNameException("\nYou must provide a first name");
@@ -240,7 +270,7 @@ public class ComStaff {
      *
      * @return the salary
      */
-    public double getSalary() {
+    public float getSalary() {
         return salary;
     }
 
@@ -249,7 +279,7 @@ public class ComStaff {
      *
      * @param salary the salary to set
      */
-    public void setSalary(double salary) {
+    public void setSalary(float salary) {
         this.salary = salary;
     }
 
@@ -258,7 +288,7 @@ public class ComStaff {
      *
      * @return the hourly
      */
-    public double getHourly() {
+    public float getHourly() {
         return hourly;
     }
 
@@ -267,7 +297,7 @@ public class ComStaff {
      *
      * @param hourly the hourly to set
      */
-    public void setHourly(double hourly) {
+    public void setHourly(float hourly) {
         this.hourly = hourly;
     }
 
@@ -289,24 +319,22 @@ public class ComStaff {
         this.enabled = enabled;
     }
 
-
     /**
      * A non static instance method that overloads the java.Object’s
      * toString() creates a specific employee’s information as a String
      */
     public String toString() {
         StringBuilder s = new StringBuilder();
-
-        s.append("HourlyEmployee Info for: " + this.getId() + "\n");
-        s.append("\tName: " + this.getFirstName() + " " + this.getLastName() + "\n");
-        s.append("\tRole: " + this.getRole() + "\n");
-        s.append("\tStarted on: " + DF.format(this.getStartDate()) + "\n");
-        s.append("\tS.I.N: " + this.getSin() + "\n");
-        s.append("\tPhone Number: " + String.valueOf(phoneNumber).replaceFirst("(\\d{3})(\\d{3})(\\d+)", "($1)$2-$3") + "\n");
-        s.append("\tEmail Address: " + this.getEmailAddress() + "\n");
-        s.append("\tAddress: " + this.getAddress() + "\n");
-        s.append("\tEnabled: " + this.isEnabled() + "\n");
-
+        Formatter frmt = new Formatter(s);
+        frmt.format("HourlyEmployee Info for: ", this.getId());
+        frmt.format("\tName: ", this.getFirstName(), " ", this.getLastName());
+        frmt.format("\tRole: ", this.getRole());
+        frmt.format("\tStarted on: ", DF.format(this.getStartDate()));
+        frmt.format("\tS.I.N: ", this.getSin());
+        frmt.format("\tPhone Number: ", String.valueOf(phoneNumber).replaceFirst("(\\d{3})(\\d{3})(\\d+)", "($1)$2-$3"));
+        frmt.format("\tEmail Address: ", this.getEmailAddress());
+        frmt.format("\tAddress: ", this.getAddress());
+        frmt.format("\tEnabled: ", this.isEnabled());
         return s.toString();
     }
 
@@ -331,7 +359,7 @@ public class ComStaff {
      *           It also checks if the entered ID is negative.
      * @return the string passed is valid
      */
-    public boolean verifyId(int id) {
+    public boolean verifyId(long id) {
 
         boolean isValid = false;
         int idConverted = String.valueOf(id).length();
@@ -350,30 +378,18 @@ public class ComStaff {
     public boolean create() throws DuplicateEmployeeException {
         return false;
     }
+
     /**
      * @return public abstract method named update() that takes no arguments and returns an int.
      */
     public int update() throws NotFoundException {
         return 0;
     }
+
     /**
      * @return public abstract method named delete() that takes no arguments and returns an int.
      */
     public int delete() throws NotFoundException {
         return 0;
-    }
-
-   /**
-    *  @return public abstract method named isValidEmailAddress() that takes string arguments and returns a boolean.
-    */
-    public static boolean isValidEmailAddress(String email) {
-        boolean result = true;
-        try {
-            InternetAddress emailAddress = new InternetAddress(email);
-            emailAddress.validate();
-        } catch (Exception ex) {
-            result = false;
-        }
-        return result;
     }
 }

@@ -12,7 +12,7 @@ import java.util.Date;
  * @version 2.0
  * @since 1.0
  */
-public class HourlyEmployee extends ComStaff {
+public class HourlyEmployee extends User {
 
     //The employee's department instance variable
     private String department;
@@ -35,7 +35,6 @@ public class HourlyEmployee extends ComStaff {
         this.department = department;
     }
 
-
     /**
      * A parameterized constructor that accepts arguments for
      * the types corresponding to the listed attributes,
@@ -43,6 +42,7 @@ public class HourlyEmployee extends ComStaff {
      * attribute using the setXxx() method
      *
      * @param id           the id for employee
+     * @param password     the password for employee
      * @param firstName    the first name for employee
      * @param lastName     the last name for employee
      * @param role         the role for employee
@@ -56,12 +56,13 @@ public class HourlyEmployee extends ComStaff {
      * @param department   the department for employee
      * @throws InvalidEmployeeDataException this exception is thrown if the employees's data is invalid
      */
-    public HourlyEmployee(int id, String firstName, String lastName, String role,
+    public HourlyEmployee(int id, String password, String firstName, String lastName, String role,
                           Date startDate, String sin, long phoneNumber, String emailAddress,
-                          String address, double hourly, boolean isEnabled, String department)
+                          String address, float hourly, boolean isEnabled, String department)
             throws InvalidEmployeeDataException {
         try {
             this.setId(id);
+            this.setPassword(password);
             this.setFirstName(firstName);
             this.setLastName(lastName);
             this.setRole(role);
@@ -77,6 +78,50 @@ public class HourlyEmployee extends ComStaff {
             throw new InvalidEmployeeDataException(e.getMessage());
         }
     }
+
+    public static boolean isExistingLogin(String id) {
+        return HourlyEmployeeDataAccess.isExistingLogin(id);
+    }
+
+    public HourlyEmployee login(long id, String password) throws NotFoundException {
+        return HourlyEmployeeDataAccess.login(id, password);
+    }
+
+    /**
+     * @param id the employee's Id
+     * @throws NotFoundException exception is thrown if the employee record not found
+     */
+    public HourlyEmployee retrieve(int id) throws NotFoundException {
+        return HourlyEmployeeDataAccess.retrieve(id);
+    }
+
+    /**
+     * HourlyEmployee public method header for a method called terminate()
+     * that takes no arguments and calls employee
+     */
+    public void terminate() {
+        HourlyEmployeeDataAccess.terminate();
+    }
+
+    /**
+     * @param id
+     * @return the employee's record as an instance of employee
+     * @throws NotFoundException
+     */
+    public HourlyEmployee find(int id) throws NotFoundException {
+        return HourlyEmployeeDataAccess.retrieve(id);
+    }
+
+    /**
+     * initialize()
+     * employee public method header for a method called initialize()
+     * that takes connection arguments and calls employee
+     */
+
+    public void initialize(Connection c) {
+        HourlyEmployeeDataAccess.initialize(c);
+    }
+
 
 
     /**
@@ -104,42 +149,31 @@ public class HourlyEmployee extends ComStaff {
     }
 
     /**
-     * @param id the employee's Id
-     * @throws NotFoundException exception is thrown if the employee record not found
-     */
-    public static HourlyEmployee retrieve(int id) throws NotFoundException {
-        return EmployeeDA.retrieve(id);
-    }
-
-
-    /**
      * @param anHourlyEmployee
      * @return boolean
      * @throws DuplicateEmployeeException
      */
     public boolean create(HourlyEmployee anHourlyEmployee) throws DuplicateEmployeeException {
-        EmployeeDA.create(anHourlyEmployee);
+        HourlyEmployeeDataAccess.create(anHourlyEmployee);
         return false;
     }
 
     /**
      * @param anHourlyEmployee
-     * @return int
-     * @throws NotFoundException
+     * @return false
      */
-    public int update(HourlyEmployee anHourlyEmployee) throws NotFoundException {
-        EmployeeDA.update(anHourlyEmployee);
-        return 0;
+    public boolean update(HourlyEmployee anHourlyEmployee) {
+        HourlyEmployeeDataAccess.update(anHourlyEmployee);
+        return false;
     }
 
     /**
      * @param anHourlyEmployee
-     * @return int
-     * @throws NotFoundException
+     * @return false
      */
-    public int delete(HourlyEmployee anHourlyEmployee) throws NotFoundException {
-        EmployeeDA.delete(anHourlyEmployee);
-        return 0;
+    public boolean delete(HourlyEmployee anHourlyEmployee) {
+        HourlyEmployeeDataAccess.delete(anHourlyEmployee);
+        return false;
     }
 
     /**
@@ -148,35 +182,6 @@ public class HourlyEmployee extends ComStaff {
      */
     public String getTypeForDisplay() {
         return "HourlyEmployee";
-    }
-
-    /**
-     * HourlyEmployee public method header for a method called terminate()
-     * that takes no arguments and calls employee
-     */
-    public static void terminate() {
-        EmployeeDA.terminate();
-    }
-
-
-    /**
-     * @param id
-     * @return the employee's record as an instance of employee
-     * @throws NotFoundException
-     */
-    public static HourlyEmployee find(int id) throws NotFoundException {
-        return EmployeeDA.retrieve(id);
-    }
-
-
-    /**
-     * initialize()
-     * employee public method header for a method called initialize()
-     * that takes connection arguments and calls employee
-     */
-
-    public static void initialize(Connection c) {
-        EmployeeDA.initialize(c);
     }
 
 }

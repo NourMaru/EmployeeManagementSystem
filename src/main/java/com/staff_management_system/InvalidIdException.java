@@ -2,6 +2,7 @@ package com.staff_management_system;
 
 /**
  * Invalid Id Exception class that extends Exception
+ *
  * @author Nour Al Jarrah
  * @version 2.0
  * @since 1.0

@@ -21,12 +21,12 @@ public interface EmployeeInterface {
     long PHONE_NUMBER = 6475294336L;
 
     /**
-     *    The default minimum id number shared variable
+     * The default minimum id number shared variable
      */
     int MINIMUM_ID_NUMBER = 100000;
 
     /**
-     *    The default maximum id number shared variable
+     * The default maximum id number shared variable
      */
     int MAXIMUM_ID_NUMBER = 999999;
 

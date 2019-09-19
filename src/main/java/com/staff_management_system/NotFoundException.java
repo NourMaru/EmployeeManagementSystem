@@ -10,7 +10,7 @@ public class NotFoundException extends Exception {
     }
 
 
-     //@param message the message of the exception thrown
+    //@param message the message of the exception thrown
 
     public NotFoundException(String message) {
         super(message);
